@@ -1,9 +1,4 @@
-/*****************************************************************************************************
- * Objetivo: Arquivo responsável por realizar o CRUD no banco de dados MySql
- * Data: 30/01/2024
- * Autor: Nicolas Vasconcelos
- * Versão: 1.0
- ****************************************************************************************************/
+
 
 const { PrismaClient } = require('@prisma/client')
 const { ERROR_INTERNAL_SERVER_DB } = require('../../modulo/config')

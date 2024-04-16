@@ -1,7 +1,3 @@
-/**********************************\
- * Autor: Nicolas Vasconcelos      \
- * Versão: 1.2                     \
- **********************************/
 
 /**
  * npm install prisma --save (realiza a conexão com o banco)

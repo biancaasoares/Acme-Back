@@ -1,9 +1,4 @@
-/****************************************
- * Objetivo: fazer as consultas no json
- * Autor: Nicolas Vasconcelos
- * Data: 23/01/2024
- * Versão: 1.0
- *****************************************/
+
 
 var dadosFilmes = require('../modulo/filmes.js')
 

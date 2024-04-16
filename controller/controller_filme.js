@@ -1,10 +1,4 @@
-/*****************************************************************************************************
- * Objetivo: Arquivo responsável por realizar validações, consistencias e regras de negócio
- * para os filmes
- * Data: 30/01/2024
- * Autor: Nicolas Vasconcelos
- * Versão: 1.0
- ****************************************************************************************************/
+
 
 const filmesDAO = require('../model/DAO/filme.js')
 const ERROR_Messages = require('../modulo/config.js')
