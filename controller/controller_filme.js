@@ -100,10 +100,33 @@ const setAtualizarFilme = async function(id, novosDados, content) {
     }
 }
 
-const setExcluirFilme = async function (id) {
-    filmesDAO.deleteFilme(id)
-}
+const setDeleteClassficacao = async function(id){
+    try {
+        
+        let idClassificacao = id;
 
+        if(idClassificacao == '' || idClassificacao == undefined || isNaN(idClassificacao)){
+            return message.ERROR_INVALID_ID;
+        }else{
+            let chamarConst = await classificacaoDAO.selectClassficationsById(idClassificacao)
+
+            if(chamarConst.length > 0){
+                let dadosClassificacao = await classificacaoDAO.deleteClassficationById(id)
+
+                if(dadosClassificacao){
+                    return message.SUCCESS_DELETED_ITEM
+                }else {
+                    return message.ERROR_INTERNAL_SERVER_DB
+                }
+            
+        }else {
+            return message.ERROR_NOT_FOUND
+        }
+    }
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER
+    }
+}
 const getListarFilmes = async function() {
 
     try {
@@ -198,7 +221,7 @@ const getFilmeNome = async function(name) {
 module.exports = {
     setNovoFilme,
     setAtualizarFilme,
-    setExcluirFilme,
+    setDeleteClassficacao,
     getListarFilmes,
     getBuscarFilme,
     getFilmeNome

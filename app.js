@@ -29,6 +29,8 @@ app.use(bodyParserJSON)
 
 const controllerFilmes = require('./controller/controller_filme.js')
 
+const controllerClassificacao = require('./controller/controller_classificacao.js')
+
 // retorna os dados do arquivo json
 app.get('/v1/acmefilmes/filmes', cors(), async(request, response, next) => {
     response.json(funcoes.getListaFilmes())
@@ -104,6 +106,22 @@ app.put('/v2/acmefilmes/filme/:id', cors(), bodyParserJSON, async(request, respo
 
     response.status(resultDados.status_code)
     response.json(resultDados)
+})
+
+app.get('/v2/acmefilmes/classificacao', cors(), async function(request, response, next) {
+
+    let dadosClassificacao = await controllerClassificacao.getListarClassificacao();
+
+    if(dadosClassificacao){
+        response.json(dadosClassificacao)
+        response.status(200)
+    }else {
+        response.json({message: "nenhum registro encontrado"})
+        response.status();
+    }
+
+   
+
 })
 
 console.log("API funcionando na porta 8080")
