@@ -108,6 +108,7 @@ app.put('/v2/acmefilmes/filme/:id', cors(), bodyParserJSON, async(request, respo
     response.json(resultDados)
 })
 
+
 app.get('/v2/acmefilmes/classificacao', cors(), async function(request, response, next) {
 
     let dadosClassificacao = await controllerClassificacao.getListarClassificacao();
@@ -122,6 +123,64 @@ app.get('/v2/acmefilmes/classificacao', cors(), async function(request, response
 
    
 
+})
+
+
+app.get('/v2/acmefilmes/classificacao/:id', cors(), async function(request, response, next) {
+
+    const idClassificacao = request.params.id
+
+    let dadosClassificacao = await controllerClassificacao.getListarClassificacao();
+
+    if(dadosClassificacao){
+        response.json(dadosClassificacao)
+        response.status(200)
+    }else {
+        response.json({message: "nenhum registro encontrado"})
+        response.status();
+    }
+
+   
+
+})
+
+app.post('/v2/acmefilmes/insertclassificacao', cors(), bodyParserJSON, async(request, response, next) => {
+
+    let contentType = request.headers['content-type']
+
+    let dadosBody = request.body
+
+    let resultDados = await controllerClassificacao.setNovaClassificacao(dadosBody, contentType)
+
+    response.status(resultDados.status_code)
+    response.json(resultDados)
+
+})
+
+
+app.put('/v2/acmefilmes/atualizarclassificacao/:id', cors(), bodyParserJSON, async(request, response, next) => {
+
+    let contentType = request.headers['content-type']
+
+    let dadosBody = request.body
+
+    let id = request.params.id
+
+    let resultDados = await controllerClassificacao.setAtualizarClassificacao( id, dadosBody, contentType,)
+
+    response.status(resultDados.status_code)
+    response.json(resultDados)
+
+})
+
+
+app.delete('/v2/acmefilmes/classificacao/:id', cors(), async function(request,response){
+
+    let classificacaoId = request.params.id
+    let resultDadosExcluirClassificacao = await controllerClassificacao.setExcluirClassificacao(classificacaoId)
+
+    // console.log(resultDadosExcluirFilme)
+    response.json(resultDadosExcluirClassificacao)
 })
 
 console.log("API funcionando na porta 8080")

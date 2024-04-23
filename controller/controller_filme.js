@@ -100,20 +100,20 @@ const setAtualizarFilme = async function(id, novosDados, content) {
     }
 }
 
-const setDeleteClassficacao = async function(id){
+const setDeleteFilme = async function(id){
     try {
         
-        let idClassificacao = id;
+        let idFilme = id;
 
-        if(idClassificacao == '' || idClassificacao == undefined || isNaN(idClassificacao)){
+        if(idFilme == '' || idFilme == undefined || isNaN(idFilme)){
             return message.ERROR_INVALID_ID;
         }else{
-            let chamarConst = await classificacaoDAO.selectClassficationsById(idClassificacao)
+            let chamarConst = await classificacaoDAO.selectFilmeById(idFilme)
 
             if(chamarConst.length > 0){
-                let dadosClassificacao = await classificacaoDAO.deleteClassficationById(id)
+                let dadosFilme = await filmesDAO.deleteSelectFilmeById(id)
 
-                if(dadosClassificacao){
+                if(dadosFilme){
                     return message.SUCCESS_DELETED_ITEM
                 }else {
                     return message.ERROR_INTERNAL_SERVER_DB
@@ -221,7 +221,7 @@ const getFilmeNome = async function(name) {
 module.exports = {
     setNovoFilme,
     setAtualizarFilme,
-    setDeleteClassficacao,
+    setDeleteFilme,
     getListarFilmes,
     getBuscarFilme,
     getFilmeNome
