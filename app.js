@@ -184,12 +184,13 @@ app.put('/v2/acmefilmes/atualizarclassificacao/:id', cors(), bodyParserJSON, asy
 })
 
 
-app.delete('/v2/acmefilmes/classificacao/:id', cors(), async function(request,response){
+app.delete('/v2/acmefilmes/classificacao/:id', cors(), async function(request,response, next){
 
-    let classificacaoId = request.params.id
-    let resultDadosExcluirClassificacao = await controllerClassificacao.setExcluirClassificacao(classificacaoId)
+    let idClassificacao = request.params.id
+    let resultDadosExcluirClassificacao = await controllerClassificacao.setExcluirClassificacao(idClassificacao)
 
     // console.log(resultDadosExcluirFilme)
+    response.json(resultDadosExcluirClassificacao.status_code)
     response.json(resultDadosExcluirClassificacao)
 })
 

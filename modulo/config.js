@@ -3,7 +3,7 @@
 /***********************Mensagens de erro******************************* */
 const ERROR_INVALID_ID = { status: false, status_code: 400, message: "Id invalido" }
 
-const ERROR_NOTFOUND = { status: false, status_code: 404, message: "Nenhum item encontrado" }
+const ERROR_NOT_FOUND = { status: false, status_code: 404, message: "Nenhum item encontrado" }
 
 const ERROR_INTERNAL_SERVER_DB = { status: false, status_code: 500, message: "Ocorreram erros no processamento da DB. Contate o administrador da API" }
 
@@ -24,9 +24,11 @@ const SUCCESS_CREATED_ITEM = { status: true, status_code: 201, message: "Dados i
 
 const SUCCESS_UPDATED_ITEM = { status: true, status_code: 200, message: "Dados atualizados com sucesso!!" }
 
+const SUCCESS_DELETED_ITEM = {status: true, status_code: 200, message: "Item deletado com sucesso"}
+
 module.exports = {
     ERROR_INVALID_ID,
-    ERROR_NOTFOUND,
+    ERROR_NOT_FOUND,
     ERROR_INTERNAL_SERVER_DB,
     ERROR_INVALID_NAME,
     ERROR_REQUIRED_FIELDS,
@@ -34,5 +36,6 @@ module.exports = {
     ERROR_INVALID_FORMAT,
     ERROR_INTERNAL_SERVER,
     SUCCESS_UPDATED_ITEM,
-    ERROR_UPDATE_ITEM
+    ERROR_UPDATE_ITEM,
+    SUCCESS_DELETED_ITEM
 }

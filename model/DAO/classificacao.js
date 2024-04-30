@@ -98,7 +98,8 @@ const updateClassificacao = async function (id, dadosClassificacao){
 
 const deleteClassificacao = async function(id){
     try {
-        const sql = `delete from tbl_classificacao where id = ${id}`;
+         let sql = `delete from tbl_classificacao where id = ${id}`;
+         
         let result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {

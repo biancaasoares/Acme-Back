@@ -91,25 +91,27 @@ const setExcluirClassificacao = async function (id) {
         let idClassificacao = id;
 
         if(idClassificacao == '' || idClassificacao == undefined || isNaN(idClassificacao)){
-            return message.ERROR_INVALID_ID;
+            return ERROR_Messages.ERROR_INVALID_ID;
         }else{
+           
             let chamarConst = await classificacaoDAO.selectClassficationsById(idClassificacao)
-
+           
             if(chamarConst.length > 0){
-                let dadosClassificacao = await filmesDAO.deleteSelectClassificacaoById(id)
+               
+                let dadosClassificacao = await classificacaoDAO.deleteClassificacao(id)
 
                 if(dadosClassificacao){
-                    return message.SUCCESS_DELETED_ITEM
+                    return ERROR_Messages.SUCCESS_DELETED_ITEM
                 }else {
-                    return message.ERROR_INTERNAL_SERVER_DB
+                    return ERROR_Messages.ERROR_INTERNAL_SERVER_DB
                 }
             
         }else {
-            return message.ERROR_NOT_FOUND
+            return ERROR_Messages.ERROR_NOT_FOUND
         }
     }
     } catch (error) {
-        return message.ERROR_INTERNAL_SERVER
+        return ERROR_Messages.ERROR_INTERNAL_SERVER
     }
 }
 

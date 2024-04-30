@@ -132,20 +132,28 @@ const setAtualizarGenero = async function(id, dadoAtualizado, contentType){
 
 const setExcluirGenero = async function(id){
 try {
-    let idGenero = id
+    let idGeneros = id;
 
-    if(idGenero == '' || idGenero == undefined || idGenero == isNaN(idGenero) || idGenero == null){
-        return message.ERROR_INVALID_ID
+    if(idGeneros == '' || idGeneros == undefined || isNaN(idGeneros)){
+        return message.ERROR_INVALID_ID;
     }else{
-        let dadosGenero = await generoDAO.deleteGenero(idGenero)
+        let chamarConst = await generoDAO.selectByIdGenero(idGeneros)
 
-        if(dadosGenero){
-           return message.SUCCESS_DELETED_ITEM
-        }else{
-            return message.ERROR_NOT_FOUND
-        }
+        if(chamarConst.length > 0){
+            let dadosGenero = await generoDAO.deleteGenero(id)
+
+            if(dadosGenero){
+                return message.SUCESS_DELETED_ITEM
+            }else {
+                return message.ERROR_INTERNAL_SERVER_DB
+            }
+        
+    }else {
+        return message.ERROR_NOT_FOUND
     }
+}
 } catch (error) {
+    console.log(error)
     return message.ERROR_INTERNAL_SERVER
 }
 }
