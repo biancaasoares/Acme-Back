@@ -31,7 +31,15 @@ const controllerFilmes = require('./controller/controller_filme.js')
 
 const controllerClassificacao = require('./controller/controller_classificacao.js')
 
-// retorna os dados do arquivo json
+const controllerNacionalidade = require('./controller/controller_nacionalidade.js')
+
+const controllerSexo = require('./controller/controller_sexo.js')
+
+const controllerGenero =  require('./controller/controller_genero.js')
+
+
+
+                                            // filmes //
 app.get('/v1/acmefilmes/filmes', cors(), async(request, response, next) => {
     response.json(funcoes.getListaFilmes())
     response.status(200)
@@ -45,7 +53,7 @@ app.get('/v1/acmefilmes/filme/:id', cors(), async(request, response, next) => {
     response.status(200)
 })
 
-// retorna os dados do banco de dados
+
 app.get('/v2/acmefilmes/filmes', cors(), async(request, response, next) => {
     let dadosFilmes = await controllerFilmes.getListarFilmes()
 
@@ -108,6 +116,8 @@ app.put('/v2/acmefilmes/filme/:id', cors(), bodyParserJSON, async(request, respo
     response.json(resultDados)
 })
 
+
+                                                    // classificacao //
 
 app.get('/v2/acmefilmes/classificacao', cors(), async function(request, response, next) {
 
@@ -182,6 +192,144 @@ app.delete('/v2/acmefilmes/classificacao/:id', cors(), async function(request,re
     // console.log(resultDadosExcluirFilme)
     response.json(resultDadosExcluirClassificacao)
 })
+
+
+                                                  // nacionalidade //
+
+app.get('/v2/acmefilmes/nacionalidade', cors(), async function(request, response, next) {
+
+    let dadosNacionalidade = await controllerNacionalidade.getListarNacionalidade()
+
+    if(dadosNacionalidade){
+        response.json(dadosNacionalidade)
+        response.status(dadosNacionalidade.status_code)
+    }else {
+        response.json({message: "nenhum registro encontrado"})
+        response.status();
+    }
+
+   
+
+})
+
+app.get('/v2/acmefilmes/nacionalidade/:id', cors(), async function(request, response, next) {
+
+    const idNacionalidade = request.params.id
+
+    let dadosNacionalidade = await controllerNacionalidade.getListarNacionalidadeByID(idNacionalidade)
+
+    if(dadosNacionalidade){
+        response.json(dadosNacionalidade)
+        response.status(200)
+    }else {
+        response.json({message: "nenhum registro encontrado"})
+        response.status();
+    }
+
+   
+
+})
+
+                                                     // sexo //
+
+app.get('/v2/acmefilmes/sexo', cors(), async function(request, response, next) {
+
+    let dadosSexo = await controllerSexo.getListarSexo()
+
+    if(dadosSexo){
+        response.json(dadosSexo)
+        response.status(dadosSexo.status_code)
+    }else {
+        response.json({message: "nenhum registro encontrado"})
+        response.status();
+    }
+
+})
+
+app.get('/v2/acmefilmes/sexo/:id', cors(), async function(request, response, next) {
+
+    const idSexo = request.params.id
+
+    let dadosSexo = await controllerSexo.getListarSexoByID(idSexo)
+
+    if(dadosSexo){
+        response.json(dadosSexo)
+        response.status(200)
+    }else {
+        response.json({message: "nenhum registro encontrado"})
+        response.status();
+    }
+
+})
+
+                                                    // Gênero //
+app.get('/v2/acmeFilmes/genero', cors(), async function(request, response){
+
+    let dadosGenero = await controllerGenero.getListarGenero()
+
+    if(dadosGenero){
+        response.json(dadosGenero);
+        response.status(200);
+    } else {
+            response.json({message: 'Nenhum registro nessa porra'})
+            response.status(404)
+    }
+})
+
+app.delete('/v2/acmeFilmes/genero/:id', cors(), async function(request, response, next){
+    let idGenero = request.params.id
+
+    let dadosGenero = await controllerGenero.setExcluirGenero(idGenero)
+
+    response.status(dadosGenero.status_code)
+    response.json(dadosGenero)
+})
+
+app.post('/v2/acmeFilmes/insert', cors(), bodyParserJSON, async function(request, response){
+
+    let contentType = request.headers['content-type']
+    
+    let dadosBody = request.body
+
+    let resultDadosNovoGenero = await controllerGenero.setInserirNovoGenero(dadosBody, contentType)
+    
+    console.log(resultDadosNovoGenero);
+    response.status(200)
+    response.json(resultDadosNovoGenero)
+})
+
+app.put('/v2/acmeFilmes/genero/:id', cors(), bodyParserJSON, async function(request, response){
+    let contentType = request.headers['content-type']
+    let dadosBody = request.body
+    let idGenero = request.params.id
+
+    let dadosGenero = await controllerGenero.setAtualizarGenero(idGenero, dadosBody, contentType)
+
+    console.log(dadosGenero)
+    response.status(200)
+    response.json(dadosGenero)
+})
+
+app.get('/v2/acmeFilmes/genero/Filtro', cors(), async function(request, response){
+    let nome = request.query.nome
+    let dadosGenero = await controllerGenero.getNomeGenero(nome)
+
+    response.status(dadosGenero.status_code)
+    response.json(dadosGenero)
+})
+
+app.get('/v2/acmeFilmes/genero/:id', cors(), async function(request, response, next){
+
+    
+    let idGenero = request.params.id
+    
+    let dadosGenero = await controllerGenero.getBuscarGenero(idGenero)
+
+    
+    response.status(200)
+    response.json(dadosGenero)
+})
+
 
 console.log("API funcionando na porta 8080")
 app.listen(8080, () => {})
