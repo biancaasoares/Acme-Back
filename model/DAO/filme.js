@@ -20,39 +20,43 @@ const insertFilme = async function(dadosFilme) {
             dadosFilme.data_relancamento == undefined ||
             dadosFilme.data_relancamento == '') {
             console.log('oi1')
-            sql = `insert into tbl_filme (nome, 
+            sql = `insert into tbl_filmes (titulo, 
                                         sinopse,
                                         duracao,
                                         data_lancamento,
                                         data_relancamento,
                                         foto_capa,
-                                        valor_unitario
+                                        valor_unitario,
+                                        id_classificacao
         ) values(
-            '${dadosFilme.nome}',
+            '${dadosFilme.titulo}',
             '${dadosFilme.sinopse}',
             '${dadosFilme.duracao}',
             '${dadosFilme.data_lancamento}',
             null,
             '${dadosFilme.foto_capa}',
-            '${dadosFilme.valor_unitario}'
+            '${dadosFilme.valor_unitario}',
+            '${dadosFilme.id_classificacao}'
         )`
         } else {
             console.log('oi2')
-            sql = `insert into tbl_filme (nome, 
+            sql = `insert into tbl_filmes (titulo, 
                                           sinopse,
                                           duracao,
                                           data_lancamento,
                                           data_relancamento,
                                           foto_capa,
-                                          valor_unitario
+                                          valor_unitario,
+                                          id_classificacao
                                     ) values(
-                                    '${dadosFilme.nome}',
+                                    '${dadosFilme.titulo}',
                                     '${dadosFilme.sinopse}',
                                     '${dadosFilme.duracao}',
                                     '${dadosFilme.data_lancamento}',
                                     null,
                                     '${dadosFilme.foto_capa}',
-                                    '${dadosFilme.valor_unitario}'
+                                    '${dadosFilme.valor_unitario}',
+                                    '${dadosFilme.id_classificacao}'
                                     )`
         }
 
@@ -72,7 +76,7 @@ const insertFilme = async function(dadosFilme) {
 
 const getId = async function() {
     try {
-        const sqlGet = 'select cast(id as decimal) as id from tbl_filme order by id desc limit 1'
+        const sqlGet = 'select cast(id as decimal) as id from tbl_filmes order by id desc limit 1'
 
         let resultGet = await prisma.$queryRawUnsafe(sqlGet)
 
@@ -93,23 +97,25 @@ const updateFilme = async function (id, dadosFilme) {
         dadosFilme.data_relancamento != null &&
         dadosFilme.data_relancamento != undefined
     ) {
-            sql = `UPDATE tbl_filme SET 
-            nome = "${dadosFilme.nome}",
+            sql = `UPDATE tbl_filmes SET 
+            titulo = "${dadosFilme.titulo}",
             sinopse = "${dadosFilme.sinopse}",
             duracao = '${dadosFilme.duracao}',
             data_lancamento = '${dadosFilme.data_lancamento}',
             data_relancamento = '${dadosFilme.data_relancamento}',
             foto_capa = '${dadosFilme.foto_capa}',
-            valor_unitario = '${dadosFilme.valor_unitario}'
+            valor_unitario = '${dadosFilme.valor_unitario}',
+            id_classificacao ='${dadosFilme.id_classificacao}'
             WHERE id = ${id}`
     } else {
-        sql = `UPDATE tbl_filme SET 
-        nome = "${dadosFilme.nome}",
+        sql = `UPDATE tbl_filmes SET 
+        titulo = "${dadosFilme.titulo}",
         sinopse = "${dadosFilme.sinopse}",
         duracao = '${dadosFilme.duracao}',
         data_lancamento = '${dadosFilme.data_lancamento}',
         foto_capa = '${dadosFilme.foto_capa}',
-        valor_unitario = '${dadosFilme.valor_unitario}'
+        valor_unitario = '${dadosFilme.valor_unitario}',
+        id_classificacao = '${dadosFilme.id_classificacao}'
         WHERE id = ${id}`
     }
     console.log(sql)
@@ -147,9 +153,9 @@ const updateFilme = async function (id, dadosFilme) {
 //     }
 // }
 
-const deleteFilme = async function (search) {
+const deleteFilme = async function (id) {
     try {
-        const sql = `DELETE FROM tbl_filme WHERE id = ${search}`;
+        const sql = `DELETE FROM tbl_filmes WHERE tbl_filmes.id = ${id}`;
         let result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
@@ -165,7 +171,7 @@ const deleteFilme = async function (search) {
 const selectAllFilmes = async function() {
     try {
 
-        let sql = 'select * from tbl_filme'
+        let sql = 'select * from tbl_filmes'
 
         let rsFilmes = await prisma.$queryRawUnsafe(sql)
         return rsFilmes
@@ -178,7 +184,7 @@ const selectAllFilmes = async function() {
 const selectFilmeById = async function(id) {
 
     try {
-        let sql = `select * from tbl_filme where id=${id}`
+        let sql = `select * from tbl_filmes where id=${id}`
 
         let rsFilme = await prisma.$queryRawUnsafe(sql)
 
@@ -190,7 +196,7 @@ const selectFilmeById = async function(id) {
 
 const selectFilmeByName = async function(name) {
     try {
-        let sql = `select * from tbl_filme where nome like "%${name}%"`
+        let sql = `select * from tbl_filmes where nome like "%${name}%"`
 
         let rsFilme = await prisma.$queryRawUnsafe(sql)
 

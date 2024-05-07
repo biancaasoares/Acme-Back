@@ -37,6 +37,10 @@ const controllerSexo = require('./controller/controller_sexo.js')
 
 const controllerGenero =  require('./controller/controller_genero.js')
 
+const controllerAtor =  require('./controller/controller_atores.js')
+
+
+
 
 
                                             // filmes //
@@ -97,7 +101,7 @@ app.post('/v2/acmefilmes/filme', cors(), bodyParserJSON, async(request, response
 app.delete('/v2/acmefilmes/filme/:id', cors(), async function(request,response){
 
     let filmeId = request.params.id
-    let resultDadosExcluirFilme = await controllerFilmes.setExcluirFilme(filmeId)
+    let resultDadosExcluirFilme = await controllerFilmes.setDeleteFilme(filmeId)
 
     // console.log(resultDadosExcluirFilme)
     response.json(resultDadosExcluirFilme)
@@ -111,6 +115,53 @@ app.put('/v2/acmefilmes/filme/:id', cors(), bodyParserJSON, async(request, respo
     let novosDados = request.body
 
     let resultDados = await controllerFilmes.setAtualizarFilme(id, novosDados, contentType)
+
+    response.status(resultDados.status_code)
+    response.json(resultDados)
+})
+
+
+                                            // atores //
+
+app.get('/v2/acmefilmes/atores', cors(), async(request, response, next) => {
+             let dadosAtor = await controllerAtor.getListarAtores()
+                                            
+                if (dadosAtor) response.json(dadosAtor), response.status(200)
+                else response.json({ message: "nenhum registro encontrado" }), response.status(404)
+ })
+
+
+ app.post('/v2/acmefilmes/atores', cors(), bodyParserJSON, async(request, response, next) => {
+
+         let contentType = request.headers['content-type']
+                                            
+         let dadosBody = request.body
+                                            
+        let resultDados = await controllerFilmes.setNovoAtor(dadosBody, contentType)
+                                            
+         response.status(resultDados.status_code)
+         response.json(resultDados)
+                                            
+  })      
+  
+app.get('/v2/acmefilmes/atores/:id', cors(), async(request, response, next) => {
+    let idAtor = request.params.id
+
+    let dadosAtor = await controllerAtor.getListarAtoresId(idAtor)
+
+    response.status(dadosAtor.status_code)
+    response.json(dadosAtor)
+
+})  
+
+app.put('/v2/acmefilmes/atores/:id', cors(), bodyParserJSON, async(request, response, next) => {
+
+    const id = request.params.id
+
+    let contentType = request.headers['content-type']
+    let novosDados = request.body
+
+    let resultDados = await controllerAtor.updateAtor(id, novosDados, contentType)
 
     response.status(resultDados.status_code)
     response.json(resultDados)
@@ -190,7 +241,7 @@ app.delete('/v2/acmefilmes/classificacao/:id', cors(), async function(request,re
     let resultDadosExcluirClassificacao = await controllerClassificacao.setExcluirClassificacao(idClassificacao)
 
     // console.log(resultDadosExcluirFilme)
-    response.json(resultDadosExcluirClassificacao.status_code)
+    response.status(resultDadosExcluirClassificacao.status_code)
     response.json(resultDadosExcluirClassificacao)
 })
 

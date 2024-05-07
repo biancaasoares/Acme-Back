@@ -12,12 +12,14 @@ const setNovoFilme = async function(dadosFilme, content) {
             let statusValidate = false
             let novoFilmeJson = {}
 
-            if (dadosFilme.nome == '' || dadosFilme.nome == undefined || dadosFilme.nome == null || dadosFilme.nome.length > 80 ||
-                dadosFilme.sinopse == '' || dadosFilme.sinopse == undefined || dadosFilme.nome == null || dadosFilme.sinopse > 65000 ||
+            if (dadosFilme.titulo == '' || dadosFilme.titulo == undefined || dadosFilme.titulo == null || dadosFilme.titulo.length > 80 ||
+                dadosFilme.sinopse == '' || dadosFilme.sinopse == undefined || dadosFilme.sinopse == null || dadosFilme.sinopse > 65000 ||
                 dadosFilme.duracao == '' || dadosFilme.duracao == undefined || dadosFilme.duracao == null || dadosFilme.duracao > 9 ||
                 dadosFilme.data_lancamento == '' || dadosFilme.data_lancamento == undefined || dadosFilme.data_lancamento == null || dadosFilme.data_lancamento.length != 10 ||
                 dadosFilme.foto_capa == '' || dadosFilme.foto_capa == undefined || dadosFilme.foto_capa == null || dadosFilme.foto_capa.length > 200 ||
-                dadosFilme.valor_unitario.length > 8 || isNaN(dadosFilme.valor_unitario)
+                dadosFilme.valor_unitario.length > 8 || isNaN(dadosFilme.valor_unitario) ||
+                dadosFilme.id_classificacao == '' || dadosFilme.id_classificacao == undefined || dadosFilme.id_classificacao == null
+
             ) {
                 return ERROR_Messages.ERROR_REQUIRED_FIELDS
             } else {
@@ -64,21 +66,23 @@ const setAtualizarFilme = async function(id, novosDados, content) {
             return ERROR_Messages.ERROR_INVALID_FORMAT
         }
 
-        const errors = []
-
-        if (!novosDados.nome || novosDados.nome === '' || novosDados.nome.length > 80 ||
-            !novosDados.sinopse || novosDados.sinopse === '' || novosDados.sinopse.length > 65000 ||
-            !novosDados.duracao || novosDados.duracao === '' || novosDados.duracao > 9 ||
-            !novosDados.data_lancamento || novosDados.data_lancamento === '' || novosDados.data_lancamento.length !== 10 ||
-            !novosDados.foto_capa || novosDados.foto_capa === '' || novosDados.foto_capa.length > 200 ||
-            (novosDados.valor_unitario && (isNaN(novosDados.valor_unitario) || novosDados.valor_unitario.length > 8)) ||
-            (novosDados.data_relancamento && novosDados.data_relancamento.length !== 10)
+        
+        
+        if (novosDados.nome || novosDados.nome === '' || novosDados.nome.length > 80 ||
+        novosDados.sinopse || novosDados.sinopse === '' || novosDados.sinopse.length > 65000 ||
+        novosDados.duracao || novosDados.duracao === '' || novosDados.duracao > 9 ||
+        novosDados.data_lancamento || novosDados.data_lancamento === '' || novosDados.data_lancamento.length !== 10 ||
+        novosDados.foto_capa || novosDados.foto_capa === '' || novosDados.foto_capa.length > 200 ||
+        novosDados.id_classificacao == '' || novosDados.id_classificacao == undefined || novosDados.id_classificacao == null
+        (novosDados.valor_unitario && (isNaN(novosDados.valor_unitario) || novosDados.valor_unitario.length > 8)) ||
+        (novosDados.data_relancamento && novosDados.data_relancamento.length !== 10)
         ) {
             if (!novosDados.data_relancamento || novosDados.data_relancamento.length !== 10) {
                 return ERROR_Messages.ERROR_REQUIRED_FIELDS
             }
             return ERROR_Messages.ERROR_REQUIRED_FIELDS
         }
+    
 
         const idFilme = id
         const filmeAtualizado = await filmesDAO.updateFilme(idFilme, novosDados)
@@ -102,29 +106,31 @@ const setAtualizarFilme = async function(id, novosDados, content) {
 
 const setDeleteFilme = async function(id){
     try {
-        
+
         let idFilme = id;
 
         if(idFilme == '' || idFilme == undefined || isNaN(idFilme)){
-            return message.ERROR_INVALID_ID;
+            return ERROR_Messages.ERROR_INVALID_ID
         }else{
-            let chamarConst = await classificacaoDAO.selectFilmeById(idFilme)
+            let chamarConst = await filmesDAO.selectFilmeById(idFilme)
 
             if(chamarConst.length > 0){
-                let dadosFilme = await filmesDAO.deleteSelectFilmeById(id)
+                
+                let dadosFilme = await filmesDAO.deleteFilme(id)
 
                 if(dadosFilme){
-                    return message.SUCCESS_DELETED_ITEM
+                    return ERROR_Messages.SUCCESS_DELETED_ITEM
                 }else {
-                    return message.ERROR_INTERNAL_SERVER_DB
+                    return ERROR_Messages.ERROR_INTERNAL_SERVER_DB
                 }
             
         }else {
-            return message.ERROR_NOT_FOUND
+            return ERROR_Messages.ERROR_NOT_FOUND
         }
     }
     } catch (error) {
-        return message.ERROR_INTERNAL_SERVER
+        console.log(error)
+        return ERROR_Messages.ERROR_INTERNAL_SERVER
     }
 }
 const getListarFilmes = async function() {
@@ -144,7 +150,7 @@ const getListarFilmes = async function() {
                 return filmesJson
 
             } else {
-                return ERROR_Messages.ERROR_NOTFOUND
+                return ERROR_Messages.ERROR_NOT_FOUND
             }
         } else {
             return ERROR_Messages.ERROR_INTERNAL_SERVER_DB
@@ -176,7 +182,7 @@ const getBuscarFilme = async function(id) {
                     return filmeJson
 
                 } else
-                    return ERROR_Messages.ERROR_NOTFOUND
+                    return ERROR_Messages.ERROR_NOT_FOUND
             } else {
                 return ERROR_Messages.ERROR_INTERNAL_SERVER_DB
             }
@@ -207,7 +213,7 @@ const getFilmeNome = async function(name) {
 
                     return filmeJson
                 } else {
-                    return ERROR_Messages.ERROR_NOTFOUND
+                    return ERROR_Messages.ERROR_NOT_FOUND
                 }
             } else {
                 return ERROR_Messages.ERROR_INTERNAL_SERVER_DB

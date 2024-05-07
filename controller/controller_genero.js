@@ -143,7 +143,7 @@ try {
             let dadosGenero = await generoDAO.deleteGenero(id)
 
             if(dadosGenero){
-                return message.SUCESS_DELETED_ITEM
+                return message.SUCCESS_DELETED_ITEM
             }else {
                 return message.ERROR_INTERNAL_SERVER_DB
             }
